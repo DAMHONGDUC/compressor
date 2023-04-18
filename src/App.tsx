@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import {useScreenDimensions} from './useScreenDimensions';
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {useScreenDimensions} from 'hooks/useScreenDimensions';
 
 export default function App() {
   const {width, height} = useScreenDimensions();
