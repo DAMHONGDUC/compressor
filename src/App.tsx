@@ -25,3 +25,9 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
 });
+
+// RN fetch blob
+// image crop picker
+// rn video
+// rn video control
+//design https://www.uplabs.com/posts/video-compressor-app-ui-ux-design
