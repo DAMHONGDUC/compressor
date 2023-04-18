@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
 import {handlePermission} from 'helper';
+import {NativeBaseProvider} from 'native-base';
+import HomeScreen from 'screen/home/home-screen';
+import {customTheme} from 'constants/theme';
 
 export default function App() {
   useEffect(() => {
@@ -9,24 +10,11 @@ export default function App() {
   });
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>hello</Text>
-    </View>
+    <NativeBaseProvider theme={customTheme}>
+      <HomeScreen />
+    </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffff',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: '#f00',
-    fontSize: 30,
-  },
-});
 
 // RN fetch blob
 // image crop picker
