@@ -1,7 +1,19 @@
 import React from 'react';
-import {Box, Column, VStack, Button} from 'native-base';
+import {
+  Box,
+  Column,
+  VStack,
+  Button,
+  Row,
+  Heading,
+  Text,
+  IconButton,
+  Icon,
+  Pressable,
+} from 'native-base';
 import DocumentPicker from 'react-native-document-picker';
 import {Image as ImageCompress} from 'react-native-compressor';
+import Feather from 'react-native-vector-icons/Feather';
 
 export default function HomeScreen() {
   const pickDocument = async () => {
@@ -26,27 +38,27 @@ export default function HomeScreen() {
   return (
     <Box backgroundColor={'primary.50'} flex={1} padding={3}>
       <Column>
-        {/* <Row justifyContent={'space-between'}>
-          <Heading>
-            <Text color="rose.500"> Compressor</Text>
-          </Heading>
-
-          <IconButton
-            _icon={{
-              as: Feather,
-              name: 'settings',
-            }}
-            _pressed={{}}
-          />
-        </Row> */}
-        <VStack space={4} alignItems="center">
+        <Column marginTop={5} space={3} alignItems="center">
+          <Text fontWeight={'bold'} fontSize="4xl" color="white">
+            Choose Your Files
+          </Text>
+          <Text fontSize="md" color="grey">
+            Choose one or multiple files
+          </Text>
           <Button
+            leftIcon={<Icon as={Feather} name="upload-cloud" size="lg" />}
+            width={150}
+            borderRadius={20}
             colorScheme="secondary"
-            size={'md'}
+            size={'lg'}
+            _text={{
+              color: 'white',
+              fontSize: 'lg',
+            }}
             onPress={() => pickDocument()}>
-            Document Picker
+            Choose
           </Button>
-        </VStack>
+        </Column>
       </Column>
     </Box>
   );

@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import {handlePermission} from 'helper';
 import {NativeBaseProvider} from 'native-base';
-import HomeScreen from 'screen/home/home-screen';
 import {customTheme} from 'constants/theme';
+import RootNavigation from 'navigation/root-navigation';
 
 export default function App() {
   useEffect(() => {
@@ -11,7 +11,7 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={customTheme}>
-      <HomeScreen />
+      <RootNavigation />
     </NativeBaseProvider>
   );
 }
