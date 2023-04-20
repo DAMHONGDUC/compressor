@@ -1,19 +1,10 @@
-import React from 'react';
-import {
-  Box,
-  Column,
-  VStack,
-  Button,
-  Row,
-  Heading,
-  Text,
-  IconButton,
-  Icon,
-  Pressable,
-} from 'native-base';
+import React, {useState} from 'react';
+import {Box, Column, Button, Text, Icon} from 'native-base';
 import DocumentPicker from 'react-native-document-picker';
 import {Image as ImageCompress} from 'react-native-compressor';
 import Feather from 'react-native-vector-icons/Feather';
+import {StyleSheet} from 'react-native';
+import CompressOptionsModal from 'components/compress-options-modal/compress-options-modal';
 
 export default function HomeScreen() {
   const pickDocument = async () => {
@@ -33,6 +24,13 @@ export default function HomeScreen() {
     } catch (err) {
       console.log({err});
     }
+  };
+
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  const onChoose = () => {
+    setShowModal(true);
+    console.log('onChoose');
   };
 
   return (
@@ -55,11 +53,22 @@ export default function HomeScreen() {
               color: 'white',
               fontSize: 'lg',
             }}
-            onPress={() => pickDocument()}>
+            onPress={onChoose}>
             Choose
           </Button>
         </Column>
       </Column>
+      <CompressOptionsModal
+        showModal={showModal}
+        setShowModal={setShowModal}></CompressOptionsModal>
     </Box>
   );
 }
+
+const styles = StyleSheet.create({
+  bottomModal: {
+    width: '100%',
+    marginBottom: 0,
+    marginTop: 'auto',
+  },
+});

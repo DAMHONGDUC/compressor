@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {RootStackNavigatorParamList} from './styles';
 import MainStack from './main-stack';
-import MainHeader from 'components/main-header';
+import MainHeader from 'components/main-header/main-header';
 
 const RootStack = createNativeStackNavigator<RootStackNavigatorParamList>();
 

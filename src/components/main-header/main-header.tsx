@@ -1,7 +1,7 @@
 import {Row, Heading, Text, IconButton} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 
-export default function MainHeader() {
+export default function MainHeader(): JSX.Element {
   return (
     <Row
       padding={3}

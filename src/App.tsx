@@ -3,16 +3,20 @@ import {handlePermission} from 'helper';
 import {NativeBaseProvider} from 'native-base';
 import {customTheme} from 'constants/theme';
 import RootNavigation from 'navigation/root-navigation';
+import {store} from 'redux/stores/app-store';
+import {Provider} from 'react-redux';
 
-export default function App() {
+export default function App(): JSX.Element {
   useEffect(() => {
     handlePermission();
   });
 
   return (
-    <NativeBaseProvider theme={customTheme}>
-      <RootNavigation />
-    </NativeBaseProvider>
+    <Provider store={store}>
+      <NativeBaseProvider theme={customTheme}>
+        <RootNavigation />
+      </NativeBaseProvider>
+    </Provider>
   );
 }
 
