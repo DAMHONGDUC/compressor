@@ -3,6 +3,8 @@ import Permission, {
   RESULTS,
 } from 'react-native-permissions';
 import {Platform} from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
+import {Image as ImageCompress} from 'react-native-compressor';
 
 const requestPermission = async (permission: PermissionType) => {
   const checkPermission = await Permission.check(permission);
@@ -18,6 +20,25 @@ export const handlePermission = async () => {
     await requestPermission(
       Permission.PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
     );
+  }
+};
+
+export const pickDocument = async () => {
+  try {
+    const document = await DocumentPicker.pickMultiple({
+      type: [DocumentPicker.types.images, DocumentPicker.types.video],
+    });
+
+    console.log(document[0].uri);
+
+    const result = await ImageCompress.compress(document[0].uri, {
+      maxWidth: 1000,
+      quality: 0.8,
+    });
+
+    console.log({result});
+  } catch (err) {
+    console.log({err});
   }
 };
 

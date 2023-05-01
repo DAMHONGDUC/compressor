@@ -1,4 +1,4 @@
-import React, {useState, useRef, useMemo, useCallback} from 'react';
+import React, {useRef, useMemo, useCallback} from 'react';
 import {
   Box,
   Column,
@@ -10,19 +10,17 @@ import {
   Row,
   IconButton,
 } from 'native-base';
-import DocumentPicker from 'react-native-document-picker';
-import {Image as ImageCompress} from 'react-native-compressor';
+
 import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Feather';
 import {StyleSheet} from 'react-native';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {compressOptions} from 'constants/common';
-import {View as RNView} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {IModalOption} from 'constants/common';
 
 export default function HomeScreen() {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  const snapPoints = useMemo(() => ['40%', '35%'], []);
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -32,27 +30,9 @@ export default function HomeScreen() {
     bottomSheetModalRef.current?.close();
   }, []);
 
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
-
-  const pickDocument = async () => {
-    try {
-      const document = await DocumentPicker.pickMultiple({
-        type: [DocumentPicker.types.images, DocumentPicker.types.video],
-      });
-
-      console.log(document[0].uri);
-
-      const result = await ImageCompress.compress(document[0].uri, {
-        maxWidth: 1000,
-        quality: 0.8,
-      });
-
-      console.log({result});
-    } catch (err) {
-      console.log({err});
-    }
+  const onPressOption = (option: IModalOption) => {
+    console.log('onPressOption', option);
+    handleCloseModalPress();
   };
 
   return (
@@ -64,10 +44,17 @@ export default function HomeScreen() {
               Choose Your Files
             </Text>
             <Text fontSize="md" color="grey">
-              Choose one or multiple files
+              Accept one or multiple files
             </Text>
             <Button
-              leftIcon={<Icon as={Feather} name="upload-cloud" size="lg" />}
+              leftIcon={
+                <Icon
+                  marginRight={1}
+                  as={Feather}
+                  name="upload-cloud"
+                  size="lg"
+                />
+              }
               width={150}
               borderRadius={20}
               colorScheme="secondary"
@@ -83,8 +70,7 @@ export default function HomeScreen() {
           <BottomSheetModal
             ref={bottomSheetModalRef}
             index={1}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}>
+            snapPoints={snapPoints}>
             <Box>
               <Row
                 paddingLeft={5}
@@ -96,7 +82,7 @@ export default function HomeScreen() {
                   fontWeight={'bold'}
                   fontSize="xl"
                   color="black">
-                  Choose one option
+                  Choose an option
                 </Text>
                 <IconButton
                   _pressed={{
@@ -104,16 +90,13 @@ export default function HomeScreen() {
                   }}
                   onPress={handleCloseModalPress}
                   icon={
-                    <Icon
-                      as={AntDesign}
-                      name="closecircleo"
-                      color={'rose.500'}
-                    />
+                    <Icon as={AntDesign} name="closecircleo" color={'black'} />
                   }></IconButton>
               </Row>
               {compressOptions.map(option => (
-                <Box key={option.index}>
+                <Box key={option.mode}>
                   <Pressable
+                    onPress={() => onPressOption(option)}
                     marginLeft={5}
                     paddingTop={3}
                     paddingBottom={3}
@@ -121,10 +104,11 @@ export default function HomeScreen() {
                     key={option.mode}>
                     <Row>
                       <Icon
-                        marginRight={2}
+                        marginRight={4}
                         as={option.icon}
                         name={option.iconName}
-                        size={option.iconSize}
+                        size={7}
+                        color={'rose.500'}
                       />
                       <Text color="black" fontSize="16">
                         {option.title}
