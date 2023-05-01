@@ -12,15 +12,22 @@ import {
 } from 'native-base';
 
 import Feather from 'react-native-vector-icons/Feather';
-import {StyleSheet} from 'react-native';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {compressOptions} from 'constants/common';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {IModalOption} from 'constants/common';
+import {getViewBoxIcon, pickDocument} from 'helper';
+import {useAppDispatch} from 'redux/stores/app-store';
+import {setCompressOption} from 'redux/slices/app-slice';
+import {useNavigation} from '@react-navigation/native';
+import {MainStackNavigationProp} from 'navigation/styles';
+import Ionicons from 'react-native-vector-icons/Feather';
 
 export default function HomeScreen() {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ['40%', '35%'], []);
+  const snapPoints = useMemo(() => ['35%', '35%'], []);
+  const dispath = useAppDispatch();
+  const navigation = useNavigation<MainStackNavigationProp>();
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -30,9 +37,15 @@ export default function HomeScreen() {
     bottomSheetModalRef.current?.close();
   }, []);
 
-  const onPressOption = (option: IModalOption) => {
-    console.log('onPressOption', option);
+  const onPressOption = async (option: IModalOption) => {
+    const isSuccess = await pickDocument(option.mode);
+
     handleCloseModalPress();
+
+    if (isSuccess) {
+      dispath(setCompressOption(option));
+      navigation.navigate('CompressScreen');
+    }
   };
 
   return (
@@ -105,7 +118,7 @@ export default function HomeScreen() {
                     <Row>
                       <Icon
                         marginRight={4}
-                        as={option.icon}
+                        as={getViewBoxIcon(option.icon)}
                         name={option.iconName}
                         size={7}
                         color={'rose.500'}
@@ -125,21 +138,3 @@ export default function HomeScreen() {
     </BottomSheetModalProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  bottomModal: {
-    width: '100%',
-    marginBottom: 0,
-    marginTop: 'auto',
-  },
-  container: {
-    flex: 1,
-    padding: 24,
-    justifyContent: 'center',
-    backgroundColor: 'grey',
-  },
-  contentContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-});

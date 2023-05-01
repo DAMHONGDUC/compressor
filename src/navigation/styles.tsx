@@ -10,4 +10,10 @@ export type RootStackNavigatorParamList = {
 
 export type MainStackNavigatorParamList = {
   HomeScreen: undefined;
+  CompressScreen: undefined;
 };
+
+export type MainStackNavigationProp = NativeStackNavigationProp<
+  MainStackNavigatorParamList,
+  'CompressScreen'
+>;

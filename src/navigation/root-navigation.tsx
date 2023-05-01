@@ -11,10 +11,15 @@ export default function RootNavigation(): JSX.Element {
   return (
     <NavigationContainer>
       <RootStack.Navigator
-        screenOptions={{
-          header: () => <MainHeader />,
-        }}>
-        <RootStack.Screen name="MainStack" component={MainStack} />
+      // screenOptions={{
+      //   header: () => <MainHeader />,
+      // }}
+      >
+        <RootStack.Screen
+          name="MainStack"
+          component={MainStack}
+          options={{headerShown: false}}
+        />
       </RootStack.Navigator>
     </NavigationContainer>
   );
