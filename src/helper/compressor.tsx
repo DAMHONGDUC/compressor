@@ -3,100 +3,83 @@ import Permission, {
   RESULTS,
 } from 'react-native-permissions';
 import {Platform} from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
+import DocumentPicker, {
+  DocumentPickerResponse,
+} from 'react-native-document-picker';
 import {Image as ImageCompress} from 'react-native-compressor';
+import RNFetchBlob from 'rn-fetch-blob';
 
-export const pickDocument = async (mode: number) => {
-  try {
-    const document = await DocumentPicker.pickMultiple({
-      type: [DocumentPicker.types.images, DocumentPicker.types.video],
-    });
+enum DocumentType {
+  IMAGE = 'image/*',
+  VIDEO = 'video/*',
+  ALL = '*/*',
+}
 
-    console.log(document[0].uri);
+class CompressorClass {
+  constructor() {}
 
-    const result = await ImageCompress.compress(document[0].uri, {
-      maxWidth: 1000,
-      quality: 0.8,
-    });
+  compressFile = async (
+    input: DocumentPickerResponse,
+    uriInput: string,
+    name: string,
+    type: string,
+  ) => {
+    if (input.type === DocumentType.IMAGE) {
+      return await this.compressImage(input.uri!, input.name!);
+    }
+  };
 
-    console.log({result});
-  } catch (err) {
-    console.log({err});
-  }
-};
+  compressImage = async (uriInput: string, name: string) => {
+    let imageResizeConfig = {
+      maxWidth: 1024,
+      maxHeight: 1024,
+      quality: 0.5,
+    };
 
-// export const compressFile = async (
-//   uriInput: string,
-//   name: string,
-//   type: string,
-// ) => {
-//   if (isImage(type)) return compressImage(uriInput, name);
-//   else return uriInput;
-// };
+    const isAndroid = Platform.OS === 'android';
 
-// const compressImage = async (uriInput: string, name: string) => {
-//   try {
-//     let imageResizeConfig = store.getState().auth.userData
-//       ?.imageResizeConfig ?? {
-//       maxWidth: IMAGE_UPLOAD_MAX_WIDTH,
-//       maxHeight: IMAGE_UPLOAD_MAX_HEIGHT,
-//       quality: IMAGE_UPLOAD_QUALITY,
-//       sizeToTrigger: SIZE_TO_TRIGGER,
-//     };
-//     const imageCompressOption = {
-//       maxWidth:
-//         imageResizeConfig.maxWidth === -1
-//           ? IMAGE_UPLOAD_MAX_WIDTH
-//           : imageResizeConfig.maxWidth,
-//       maxHeight:
-//         imageResizeConfig.maxHeight === -1
-//           ? IMAGE_UPLOAD_MAX_HEIGHT
-//           : imageResizeConfig.maxHeight,
-//       quality: imageResizeConfig.quality,
-//     };
+    let uri = isAndroid ? uriInput : uriInput.replace('file://', '');
+    if (isAndroid && uri.includes('com.android.providers.downloads')) {
+      uri = `${RNFetchBlob.fs.dirs.DownloadDir}/${name}`;
+    }
 
-//     const isAndroid = Platform.OS === 'android';
+    const stat = await RNFetchBlob.fs.stat(
+      isAndroid ? uri : uri.replace('file://', ''),
+    );
 
-//     let uri = isAndroid ? uriInput : uriInput.replace('file://', '');
-//     if (isAndroid && uri.includes('com.android.providers.downloads')) {
-//       uri = `${RNFetchBlob.fs.dirs.DownloadDir}/${name}`;
-//     }
+    try {
+      const cacheName = `${name}_${Date.now()}`;
+      const destPath = `${RNFetchBlob.fs.dirs.CacheDir}/${cacheName}`;
+      //store.dispatch(addListCacheImageCompress(cacheName));
+      await RNFetchBlob.fs.cp(uri, destPath);
 
-//     const stat = await RNFetchBlob.fs.stat(
-//       isAndroid ? uri : uri.replace('file://', ''),
-//     );
+      const result = await ImageCompress.compress(destPath, imageResizeConfig);
 
-//     if (stat.size > imageResizeConfig.sizeToTrigger) {
-//       const cacheName = `${name}_${Date.now()}`;
-//       const destPath = `${RNFetchBlob.fs.dirs.CacheDir}/${cacheName}`;
-//       store.dispatch(addListCacheImageCompress(cacheName));
+      return result;
+    } catch (err) {}
 
-//       await RNFetchBlob.fs.cp(uri, destPath);
+    return uriInput;
+  };
 
-//       console.log(uri);
-//       const result = await ImageCompress.compress(
-//         destPath,
-//         imageCompressOption,
-//       );
+  compressVideo = async () => {};
 
-//       return result;
-//     }
-//     return uriInput;
-//   } catch (err) {}
-// };
+  archiveFiles = async () => {};
 
-// export const deleteCompressedCache = async () => {
-//   try {
-//     const listCacheImageCompress =
-//       store.getState().appInfo.listCacheImageCompress;
+  deleteCompressedCache = async () => {
+    try {
+      const listCacheImageCompress: any[] = [];
+      //store.getState().appInfo.listCacheImageCompress;
 
-//     await Promise.all(
-//       listCacheImageCompress.map(async e => {
-//         const destPath = `${RNFetchBlob.fs.dirs.CacheDir}/${e}`;
-//         const destPathExist = await RNFetchBlob.fs.exists(destPath);
+      await Promise.all(
+        listCacheImageCompress.map(async e => {
+          const destPath = `${RNFetchBlob.fs.dirs.CacheDir}/${e}`;
+          const destPathExist = await RNFetchBlob.fs.exists(destPath);
 
-//         if (destPathExist) await RNFetchBlob.fs.unlink(destPath);
-//       }),
-//     );
-//   } catch (err) {}
-// };
+          if (destPathExist) await RNFetchBlob.fs.unlink(destPath);
+        }),
+      );
+    } catch (err) {}
+  };
+}
+
+export const CompressorHelper = new CompressorClass();

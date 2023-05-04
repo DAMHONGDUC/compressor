@@ -50,6 +50,8 @@ export const pickDocument = async (mode: number) => {
       type: type,
     });
 
+    console.log(filesPath);
+
     store.dispatch(setFilesPath(filesPath));
 
     return true;
