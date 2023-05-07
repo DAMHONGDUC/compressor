@@ -1,10 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import appSlice from 'redux/slices/app-slice';
+import compressSlice from 'redux/slices/compress-slice';
 
 export const store = configureStore({
   reducer: {
     app: appSlice,
+    compress: compressSlice,
   },
 });
 

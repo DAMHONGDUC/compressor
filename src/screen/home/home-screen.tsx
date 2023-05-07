@@ -13,15 +13,14 @@ import {
 
 import Feather from 'react-native-vector-icons/Feather';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import {compressOptions} from 'constants/common';
+import {compressTypes} from 'constants/common';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {IModalOption} from 'constants/common';
+import {ICompressType} from 'constants/common';
 import {getViewBoxIcon, pickDocument} from 'helper';
 import {useAppDispatch} from 'redux/stores/app-store';
-import {setCompressOption} from 'redux/slices/app-slice';
+import {setCompressType} from 'redux/slices/app-slice';
 import {useNavigation} from '@react-navigation/native';
 import {MainStackNavigationProp} from 'navigation/styles';
-import Ionicons from 'react-native-vector-icons/Feather';
 
 export default function HomeScreen() {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -37,13 +36,13 @@ export default function HomeScreen() {
     bottomSheetModalRef.current?.close();
   }, []);
 
-  const onPressOption = async (option: IModalOption) => {
-    const isSuccess = await pickDocument(option.mode);
+  const onPressOption = async (compressType: ICompressType) => {
+    const isSuccess = await pickDocument(compressType.type);
 
     handleCloseModalPress();
 
     if (isSuccess) {
-      dispath(setCompressOption(option));
+      dispath(setCompressType(compressType));
       navigation.navigate('CompressScreen');
     }
   };
@@ -106,25 +105,24 @@ export default function HomeScreen() {
                     <Icon as={AntDesign} name="closecircleo" color={'black'} />
                   }></IconButton>
               </Row>
-              {compressOptions.map(option => (
-                <Box key={option.mode}>
+              {compressTypes.map(compressType => (
+                <Box key={compressType.type}>
                   <Pressable
-                    onPress={() => onPressOption(option)}
+                    onPress={() => onPressOption(compressType)}
                     marginLeft={5}
                     paddingTop={3}
                     paddingBottom={3}
-                    justifyContent={'center'}
-                    key={option.mode}>
+                    justifyContent={'center'}>
                     <Row>
                       <Icon
                         marginRight={4}
-                        as={getViewBoxIcon(option.icon)}
-                        name={option.iconName}
+                        as={getViewBoxIcon(compressType.icon)}
+                        name={compressType.iconName}
                         size={7}
                         color={'rose.500'}
                       />
                       <Text color="black" fontSize="16">
-                        {option.title}
+                        {compressType.title}
                       </Text>
                     </Row>
                   </Pressable>

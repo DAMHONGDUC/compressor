@@ -5,7 +5,7 @@ import Permission, {
 import {Platform} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import {Image as ImageCompress} from 'react-native-compressor';
-import {CompressMode} from 'constants/common';
+import {CompressType} from 'constants/common';
 import {store} from 'redux/stores/app-store';
 import {setFilesPath} from 'redux/slices/app-slice';
 import Feather from 'react-native-vector-icons/Feather';
@@ -35,13 +35,13 @@ export const pickDocument = async (mode: number) => {
     let type: string = DocumentPicker.types.allFiles;
 
     switch (mode) {
-      case CompressMode.REDUCE_FILE_SIZE_IMAGE:
+      case CompressType.COMPRESS_IMAGE:
         type = DocumentPicker.types.images;
         break;
-      case CompressMode.REDUCE_FILE_SIZE_VIDEO:
+      case CompressType.COMPRESS_VIDEO:
         type = DocumentPicker.types.video;
         break;
-      case CompressMode.COMPRESS_FILES:
+      case CompressType.ARCHIVE_FILES:
         type = DocumentPicker.types.allFiles;
         break;
     }

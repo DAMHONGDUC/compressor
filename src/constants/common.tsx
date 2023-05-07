@@ -1,34 +1,59 @@
-export enum CompressMode {
+export enum CompressType {
   NONE = 0,
-  REDUCE_FILE_SIZE_IMAGE = 1,
-  REDUCE_FILE_SIZE_VIDEO = 2,
-  COMPRESS_FILES = 3,
+  COMPRESS_IMAGE = 1,
+  COMPRESS_VIDEO = 2,
+  ARCHIVE_FILES = 3,
 }
 
-export interface IModalOption {
+export enum CompressOption {
+  NONE = 0,
+  AUTO_COMPRESS = 1,
+  CUSTOM_COMPRESS = 2,
+}
+
+export interface ICompressOption {
+  type: number;
   title: string;
-  mode: number;
+  subTitle: string;
+}
+
+export interface ICompressType {
+  title: string;
+  type: number;
   icon: string;
   iconName: string;
 }
 
-export const compressOptions: IModalOption[] = [
+export const compressTypes: ICompressType[] = [
   {
-    title: 'Reduce Image Quality',
-    mode: CompressMode.REDUCE_FILE_SIZE_IMAGE,
+    title: 'Compress Image',
+    type: CompressType.COMPRESS_IMAGE,
     icon: 'Ionicons',
     iconName: 'image',
   },
   {
-    title: 'Reduce Video Quality',
-    mode: CompressMode.REDUCE_FILE_SIZE_VIDEO,
+    title: 'Compress Video',
+    type: CompressType.COMPRESS_VIDEO,
     icon: 'MaterialIcons',
     iconName: 'video-collection',
   },
   {
-    title: 'Compress files (zip, rar)',
-    mode: CompressMode.COMPRESS_FILES,
+    title: 'Archive files (zip, rar)',
+    type: CompressType.ARCHIVE_FILES,
     icon: 'MaterialIcons',
     iconName: 'compress',
+  },
+];
+
+export const compressImageOptions: ICompressOption[] = [
+  {
+    type: CompressOption.AUTO_COMPRESS,
+    title: 'Auto compression',
+    subTitle: 'Medium file size, medium quality',
+  },
+  {
+    type: CompressOption.CUSTOM_COMPRESS,
+    title: 'Custom',
+    subTitle: 'Chosse your own settings',
   },
 ];

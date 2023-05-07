@@ -1,9 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {CompressMode} from 'constants/common';
-import {IModalOption} from 'constants/common';
+import {CompressType} from 'constants/common';
+import {ICompressType} from 'constants/common';
 
 interface IAppStore {
-  compressOption?: IModalOption;
+  compressType?: ICompressType;
   filesPath?: string[];
 }
 
@@ -15,8 +15,8 @@ export const appSlice = createSlice({
   name: 'appSlice',
   initialState: initialState,
   reducers: {
-    setCompressOption: (state, action) => {
-      state.compressOption = action.payload;
+    setCompressType: (state, action) => {
+      state.compressType = action.payload;
     },
     setFilesPath: (state, action) => {
       state.filesPath = action.payload;
@@ -24,6 +24,6 @@ export const appSlice = createSlice({
   },
 });
 
-export const {setCompressOption, setFilesPath} = appSlice.actions;
+export const {setCompressType, setFilesPath} = appSlice.actions;
 
 export default appSlice.reducer;
