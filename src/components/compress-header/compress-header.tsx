@@ -5,13 +5,16 @@ import {MainStackNavigationProp} from 'navigation/styles';
 
 interface IProp {
   heading: string;
+  onPress: () => void;
+  iconName: string;
 }
 
-export default function CompressHeader({heading}: IProp): JSX.Element {
+export default function CompressHeader({
+  heading,
+  onPress,
+  iconName,
+}: IProp): JSX.Element {
   const navigation = useNavigation<MainStackNavigationProp>();
-  const onBack = () => {
-    navigation.pop();
-  };
 
   return (
     <Row
@@ -24,13 +27,9 @@ export default function CompressHeader({heading}: IProp): JSX.Element {
         position={'absolute'}
         left={3}
         top={0}
-        onPress={onBack}
+        onPress={onPress}
         justifyContent={'center'}>
-        <Icon
-          as={getViewBoxIcon('Ionicons')}
-          name="ios-chevron-back-circle"
-          size={'4xl'}
-        />
+        <Icon as={getViewBoxIcon('Ionicons')} name={iconName} size={'4xl'} />
       </Pressable>
       <Heading fontSize={'xl'} marginLeft={3} marginTop={2}>
         <Text color="white">{heading}</Text>

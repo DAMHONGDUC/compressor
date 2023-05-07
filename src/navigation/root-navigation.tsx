@@ -10,11 +10,7 @@ const RootStack = createNativeStackNavigator<RootStackNavigatorParamList>();
 export default function RootNavigation(): JSX.Element {
   return (
     <NavigationContainer>
-      <RootStack.Navigator
-      // screenOptions={{
-      //   header: () => <MainHeader />,
-      // }}
-      >
+      <RootStack.Navigator>
         <RootStack.Screen
           name="MainStack"
           component={MainStack}

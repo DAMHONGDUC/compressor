@@ -24,7 +24,7 @@ export default function CompressOptionRow({
   option,
   currentOption,
   setCurrentOption,
-}: IProps) {
+}: IProps): JSX.Element {
   const isChoose = currentOption === option.type;
 
   const onChangeOption = () => {
@@ -53,11 +53,11 @@ export default function CompressOptionRow({
               <Column space={2}>
                 <Heading fontSize={'lg'}>
                   <Text color={isChoose ? 'black' : 'white'}>
-                    Auto compression
+                    {option.title}
                   </Text>
                 </Heading>
                 <Text color={isChoose ? 'black' : 'gray.400'}>
-                  Medium file size, medium quality
+                  {option.subTitle}
                 </Text>
               </Column>
               <Checkbox

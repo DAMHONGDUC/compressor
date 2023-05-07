@@ -10,11 +10,15 @@ import {
 interface IAppStore {
   compressImageOptions: ICompressOption;
   currentOption: number;
+  compressProgress: number;
+  isDone: boolean;
 }
 
 const initialState: IAppStore = {
   compressImageOptions: compressImageOptions[0],
   currentOption: CompressOption.AUTO_COMPRESS,
+  compressProgress: 0,
+  isDone: false,
 };
 
 export const compressSlice = createSlice({
@@ -24,13 +28,23 @@ export const compressSlice = createSlice({
     setCompressImageOptions: (state, action) => {
       state.compressImageOptions = action.payload;
     },
-    setCurrentOption: (state, action) => {
+    setCurrentCompressOption: (state, action) => {
       state.currentOption = action.payload;
+    },
+    setCompressProgress: (state, action) => {
+      state.compressProgress = action.payload;
+    },
+    setIsDone: (state, action) => {
+      state.isDone = action.payload;
     },
   },
 });
 
-export const {setCompressImageOptions, setCurrentOption} =
-  compressSlice.actions;
+export const {
+  setCompressImageOptions,
+  setCurrentCompressOption,
+  setCompressProgress,
+  setIsDone,
+} = compressSlice.actions;
 
 export default compressSlice.reducer;

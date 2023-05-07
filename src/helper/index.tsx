@@ -12,6 +12,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {DocumentType} from './compressor';
 
 const requestPermission = async (permission: PermissionType) => {
   const checkPermission = await Permission.check(permission);
@@ -50,14 +51,10 @@ export const pickDocument = async (mode: number) => {
       type: type,
     });
 
-    console.log(filesPath);
-
     store.dispatch(setFilesPath(filesPath));
 
     return true;
-  } catch (err) {
-    console.log({err});
-  }
+  } catch (err) {}
 };
 
 export const getViewBoxIcon = (type: string) => {
@@ -71,4 +68,8 @@ export const getViewBoxIcon = (type: string) => {
     case 'Ionicons':
       return Ionicons;
   }
+};
+
+export const isImageFile = (type: string) => {
+  return type.includes(DocumentType.IMAGE);
 };

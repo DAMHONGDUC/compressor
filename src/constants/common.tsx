@@ -57,3 +57,5 @@ export const compressImageOptions: ICompressOption[] = [
     subTitle: 'Chosse your own settings',
   },
 ];
+
+export const TOTAL_PROGRESS = 100;

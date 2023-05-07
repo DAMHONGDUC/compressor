@@ -22,7 +22,7 @@ import {setCompressType} from 'redux/slices/app-slice';
 import {useNavigation} from '@react-navigation/native';
 import {MainStackNavigationProp} from 'navigation/styles';
 
-export default function HomeScreen() {
+export default function HomeScreen(): JSX.Element {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['35%', '35%'], []);
   const dispath = useAppDispatch();

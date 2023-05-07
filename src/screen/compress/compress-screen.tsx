@@ -1,27 +1,48 @@
 import {useEffect, useState} from 'react';
-import {useAppSelector} from 'redux/stores/app-store';
+import {useAppDispatch, useAppSelector} from 'redux/stores/app-store';
 import CompressHeader from 'components/compress-header/compress-header';
-import {
-  Box,
-  Pressable,
-  HStack,
-  Badge,
-  Spacer,
-  Text,
-  Flex,
-  Heading,
-  Column,
-  Checkbox,
-  Row,
-  Button,
-} from 'native-base';
+import {Box} from 'native-base';
 import CompressOptionRow from './compress-option-row';
-import {compressImageOptions} from 'constants/common';
+import {
+  compressImageOptions,
+  CompressOption,
+  CompressType,
+} from 'constants/common';
 import PrimaryButton from 'components/button/primary-button';
+import {CompressorHelper} from 'helper/compressor';
+import {setCurrentCompressOption} from 'redux/slices/compress-slice';
+import ProgressModal from 'components/progress-modal/progress-modal';
+import {useNavigation} from '@react-navigation/native';
+import {MainStackNavigationProp} from 'navigation/styles';
 
-export default function CompressScreen() {
+export default function CompressScreen(): JSX.Element {
   const {compressType, filesPath} = useAppSelector(state => state.app);
-  const [currentOption, setCurrentOption] = useState<number>(1);
+  const [currentOption, setCurrentOption] = useState<number>(
+    CompressOption.AUTO_COMPRESS,
+  );
+  const [showProgressModal, setShowProgressModal] = useState<boolean>(false);
+  const dispath = useAppDispatch();
+  const navigation = useNavigation<MainStackNavigationProp>();
+
+  const onContinue = async () => {
+    dispath(setCurrentCompressOption(currentOption));
+    setShowProgressModal(compressType?.type! !== CompressType.COMPRESS_IMAGE);
+
+    const result = await CompressorHelper.compressFile(filesPath!);
+
+    if (result) {
+      navigation.navigate('CompressResultScreen');
+      console.log({result});
+    }
+  };
+
+  const onCancelProgress = () => {
+    setShowProgressModal(false);
+  };
+
+  const onBack = () => {
+    navigation.pop();
+  };
 
   return (
     <Box
@@ -29,7 +50,11 @@ export default function CompressScreen() {
       backgroundColor={'primary.50'}
       flex={1}
       padding={3}>
-      <CompressHeader heading={compressType!.title} />
+      <CompressHeader
+        iconName={'ios-chevron-back-circle'}
+        heading={compressType!.title}
+        onPress={onBack}
+      />
       <Box height={250}></Box>
       <Box>
         {compressImageOptions.map(option => (
@@ -41,12 +66,8 @@ export default function CompressScreen() {
           />
         ))}
       </Box>
-      <PrimaryButton
-        onPress={() => {
-          console.log('continue');
-        }}
-        title={'Continue'}
-      />
+      <PrimaryButton onPress={onContinue} title={'Continue'} />
+      <ProgressModal isOpen={showProgressModal} onCancel={onCancelProgress} />
     </Box>
   );
 }

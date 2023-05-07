@@ -1,10 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {CompressType} from 'constants/common';
 import {ICompressType} from 'constants/common';
+import {DocumentPickerResponse} from 'react-native-document-picker';
 
 interface IAppStore {
   compressType?: ICompressType;
-  filesPath?: string[];
+  filesPath?: DocumentPickerResponse[];
 }
 
 const initialState: IAppStore = {

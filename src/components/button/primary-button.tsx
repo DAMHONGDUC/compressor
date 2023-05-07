@@ -5,7 +5,7 @@ interface IProps {
   title: string;
 }
 
-export default function PrimaryButton({onPress, title}: IProps) {
+export default function PrimaryButton({onPress, title}: IProps): JSX.Element {
   return (
     <Button
       _text={{

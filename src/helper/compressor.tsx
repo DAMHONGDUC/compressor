@@ -8,24 +8,21 @@ import DocumentPicker, {
 } from 'react-native-document-picker';
 import {Image as ImageCompress} from 'react-native-compressor';
 import RNFetchBlob from 'rn-fetch-blob';
+import {isImageFile} from 'helper';
+import {store} from 'redux/stores/app-store';
 
-enum DocumentType {
-  IMAGE = 'image/*',
-  VIDEO = 'video/*',
+export enum DocumentType {
+  IMAGE = 'image/',
+  VIDEO = 'video/',
   ALL = '*/*',
 }
 
 class CompressorClass {
   constructor() {}
 
-  compressFile = async (
-    input: DocumentPickerResponse,
-    uriInput: string,
-    name: string,
-    type: string,
-  ) => {
-    if (input.type === DocumentType.IMAGE) {
-      return await this.compressImage(input.uri!, input.name!);
+  compressFile = async (input: DocumentPickerResponse[]) => {
+    if (isImageFile(input[0].type!)) {
+      return await this.compressImage(input[0].uri!, input[0].name!);
     }
   };
 
@@ -43,17 +40,10 @@ class CompressorClass {
       uri = `${RNFetchBlob.fs.dirs.DownloadDir}/${name}`;
     }
 
-    const stat = await RNFetchBlob.fs.stat(
-      isAndroid ? uri : uri.replace('file://', ''),
-    );
-
     try {
-      const cacheName = `${name}_${Date.now()}`;
-      const destPath = `${RNFetchBlob.fs.dirs.CacheDir}/${cacheName}`;
       //store.dispatch(addListCacheImageCompress(cacheName));
-      await RNFetchBlob.fs.cp(uri, destPath);
 
-      const result = await ImageCompress.compress(destPath, imageResizeConfig);
+      const result = await ImageCompress.compress(uriInput, imageResizeConfig);
 
       return result;
     } catch (err) {}
